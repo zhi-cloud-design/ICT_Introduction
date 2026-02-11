@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Unraveling the Reasoning Core: Unique Tokens Drive Effective Reinforcement Learning for LLM Exploration">
+  <meta name="keywords" content="LLM, Reinforcement Learning, RLVR, ICT Framework, Token Importance">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unique Tokens Drive Effective RL for LLM Exploration</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <!-- Bulma & Plugins -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  
+  <style>
+    /* 核心修改：强制全站背景为纯白，消除任何微小色差 */
+    html, body {
+      background-color: #ffffff !important;
+    }
+
+    section, .hero, .hero-body, .section, footer, .container {
+      background-color: #ffffff !important;
+      background: #ffffff !important;
+    }
+
+    /* 移除所有可能导致视觉颜色偏差的阴影 */
+    * {
+      box-shadow: none !important;
+    }
+
+    body { 
+      font-family: 'Noto Sans', sans-serif; 
+      color: #4a4a4a; 
+    }
+
+    .publication-title { 
+      font-family: 'Google Sans', sans-serif; 
+      font-weight: 800 !important; 
+      font-size: 2.8rem !important; 
+      color: #222222; 
+    }
+
+    .section-title { 
+      font-family: 'Google Sans', sans-serif; 
+      font-weight: 700 !important; 
+      font-size: 2.2rem !important; 
+      text-align: left; 
+      margin-bottom: 1.5rem;
+      color: #363636;
+    }
+
+    /* 截图中的高亮蓝色 */
+    .highlight-blue {
+      color: #3273dc;
+      font-weight: 700;
+    }
+
+    /* 左右布局微调 */
+    .column-text { 
+      padding-right: 3rem !important; 
+    }
+    
+    /* 图片样式：移除阴影，确保边缘纯净 */
+    .figure-img { 
+      border-radius: 0px; /* 移除圆角以防抗锯齿产生灰边 */
+      width: 100%; 
+      display: block;
+    }
+    
+    .figure-caption { 
+      font-size: 1rem; 
+      color: #7a7a7a; 
+      margin-top: 1.2rem; 
+      font-style: italic; 
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .header-icon {
+      margin-right: 15px;
+      vertical-align: middle;
+    }
+
+    /* BibTeX 背景也设为极淡的灰色以便区分，或者也可以设为白色 */
+    #BibTeX pre { 
+      background-color: #f8f8f8; 
+      border: 1px solid #eeeeee;
+      border-radius: 4px;
+      padding: 1.5rem; 
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<!-- Header Section -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Unraveling the Reasoning Core: Unique Tokens Drive Effective Reinforcement Learning for LLM Exploration</h1>
+          
+          <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
+            <span class="author-block">Xuanzhi Feng<sup>1</sup>,</span>
+            <span class="author-block">Haoxi Li<sup>2</sup>,</span>
+            <span class="author-block">Bing Guo<sup>2</sup>,</span>
+            <span class="author-block">Yuming Jiang<sup>1</sup>,</span>
+            <span class="author-block">Jie Zhang<sup>1</sup>,</span>
+            <span class="author-block">Song Guo<sup>1</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>The Hong Kong Polytechnic University,</span>
+            <span class="author-block"><sup>2</sup>Sichuan University</span>
+          </div>
+
+          <div class="column has-text-centered" style="margin-top: 1rem;">
+            <div class="publication-links">
+              <a href="#" class="button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span></a>
+              <a href="#" class="button is-normal is-rounded is-dark"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span></a>
+              <a href="#" class="button is-normal is-rounded is-dark"><span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 1. Abstract Section (Top Image, Bottom Text) -->
+<section class="section">
+  <div class="container is-max-desktop">
+    
+    <!-- Top Part: Figure 1 -->
+    <!-- <div class="columns is-centered">
+      <div class="column is-11">
+        <div style="text-align: center;">
+          <img src="./static/images/Fig1.png" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);" alt="Abstract Visualization">
+          <p class="figure-caption" style="font-size: 0.88rem; margin-top: 0.8rem; color: #666; font-style: italic;">
+            <strong>Figure 1:</strong> (a) Blind Exploration vs (b) Guided Exploration using ICT.
+          </p>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Bottom Part: Abstract Text -->
+    <div class="columns is-centered" style="margin-top: 2rem;">
+      <div class="column is-11">
+        <h2 class="title is-4 section-title" style="margin-bottom: 1.2rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
+          <span class="header-icon">📖</span> Abstract
+        </h2>
+        
+        <div class="content has-text-justified" style="font-size: 1.3rem; line-height: 1.6; color: #444;">
+          <p>
+            Reinforcement Learning with Verifiable Rewards (RLVR) has significantly advanced Large Language Model (LLM) reasoning; however, it faces a fundamental optimization instability: uniform token updates precipitate <span style="color: #3273dc; font-weight: 600;">entropy collapse</span> (premature convergence), while scalar entropy maximization risks <strong>entropy explosion</strong> (blind exploration). 
+          </p>
+          <p>
+            To resolve this dichotomy, we introduce the <strong>Independent Combinatorial Tokens (ICT)</strong> framework, which shifts the focus from scalar uncertainty to the structural properties of logits distributions. By leveraging Jensen-Shannon (JS) divergence, ICT identifies <em>unique tokens</em>—critical branching points—to guide effective exploration. 
+          </p>
+          <p>
+            Our theoretical analysis, grounded in second-order Rényi entropy, proves that selectively updating these tokens regulates strategy purity, effectively stabilizing the training landscape. Empirical results demonstrate that updating merely the top 10% of unique tokens yields a <span style="background-color: #fff4e5; padding: 2px 4px; border-radius: 3px; font-weight: bold;">5.65% improvement</span> on the Math benchmark over full-parameter baselines, validating that structural information selection is essential for efficient reasoning alignment.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 1.5. Motivation Section (Left Text, Right Image) -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-vcentered is-variable is-8">
+      
+      <!-- Left Column: Logical Motivation -->
+      <div class="column is-6">
+        <h2 class="title is-4" style="margin-bottom: 0.8rem; display: flex; align-items: center;">
+          <span style="margin-right: 0.5rem;">📖</span> Motivation
+        </h2>
+        
+        <div class="content has-text-justified" style="font-size: 0.88rem; line-height: 1.45; color: #444;">
+          
+          <!-- 1. Entropy Collapse in General RLVR -->
+          <h3 style="font-size: 1rem; margin-bottom: 0.3rem; color: #222;">1. Limitations of General RLVR</h3>
+          <p style="margin-bottom: 0.6rem;">
+            Prevailing RLVR methods, such as <strong>GRPO</strong>, apply training signals uniformly across all tokens. This often triggers <strong>Entropy Collapse</strong>, where the model converges prematurely to local optima, resulting in insufficient exploration capacity.
+          </p>
+
+          <!-- 2. Entropy Control & Metric Ambiguity -->
+          <h3 style="font-size: 1rem; margin-bottom: 0.3rem; color: #222;">2. Entropy Explosion & Metric Ambiguity</h3>
+          <p style="margin-bottom: 0.6rem;">
+            While existing works attempt to enhance exploration via entropy maximization, they frequently suffer from <strong>Entropy Explosion</strong> (persistent instability). Furthermore, as shown in Fig 1(a), scalar entropy is an <strong>ambiguous metric</strong>: identical entropy values can mask vastly different distribution structures, leading the model into "blind exploration" and reasoning dead ends.
+          </p>
+
+          <!-- 3. Unique Tokens through Structural Analysis -->
+          <h3 style="font-size: 1rem; margin-bottom: 0.3rem; color: #222;">3. Finding the Reasoning Core via Structure</h3>
+          <p style="margin-bottom: 0.6rem;">
+            To resolve this, we shift the focus from scalar uncertainty to <strong>logit distribution structures</strong>. By identifying <strong>Unique Tokens</strong>—the critical branching points of reasoning—our ICT framework enables <strong>Guided Exploration</strong> (Fig 1b), effectively stabilizing the training landscape while driving efficient reasoning alignment.
+          </p>
+
+          <!-- Summary Block -->
+          <div style="margin-top: 1rem; padding: 0.8rem; background-color: #f6f8fa; border-left: 4px solid #3273dc; border-radius: 4px;">
+            <p style="margin-bottom: 0; font-size: 0.85rem; line-height: 1.4;">
+              <strong>Key Insight:</strong> Instead of indiscriminate entropy control, targeting tokens with <strong>unique structural information</strong> is the key to balancing exploration and convergence in LLM reasoning.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right Column: Image -->
+      <div class="column is-6">
+        <div style="text-align: center;">
+          <img src="./static/images/Fig1.png" style="width: 100%; height: auto; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.12);" alt="ICT Motivation Logic Visualization">
+          <p style="font-size: 0.82rem; color: #666; margin-top: 0.8rem; font-style: italic;">
+            <strong>Figure 1:</strong> (a) Blind Exploration vs. (b) Guided Exploration using ICT.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- 2. Methodology Section: Top-Image, Bottom-Text -->
+<section class="section">
+  <div class="container is-max-desktop">
+    
+    <!-- Top Part: Architecture Diagram -->
+    <div class="columns is-centered">
+      <div class="column is-11">
+        <div style="text-align: center;">
+          <img src="./static/images/Fig2.png" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" alt="Methodology Architecture">
+          <p style="font-size: 0.95rem; color: #666; margin-top: 1rem; font-style: italic;">
+            <strong>Figure 2:</strong> The ICT-based Sparse RLVR Framework. The selector identifies high-value tokens to construct a sparse gradient mask for targeted optimization.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Part: Detailed Introduction -->
+    <div class="columns is-centered" style="margin-top: 2rem;">
+      <div class="column is-11">
+        <h2 class="title is-3 section-title" style="border-bottom: 2px solid #eee; padding-bottom: 0.5rem;">
+          <span class="header-icon">🏗️</span> Methodology Details
+        </h2>
+        
+        <div class="content has-text-justified" style="font-size: 1.05rem; line-height: 1.6; color: #444;">
+          <p>
+            The <strong>ICT framework</strong> represents a paradigm shift in RLVR by moving away from scalar uncertainty metrics. Instead, it focuses on the <strong>structural properties of logit distributions</strong>, enabling a significantly more precise selection of "Unique Tokens" for the optimization process.
+          </p>
+
+          <div class="columns">
+            <!-- Column 1: Selector & Estimator -->
+            <div class="column">
+              <h4 style="color: #3273dc; margin-bottom: 0.5rem;">🔹 Structural Selector</h4>
+              <p style="font-size: 1rem; margin-bottom: 1.2rem;">
+                The framework employs <strong>Jensen-Shannon (JS) Divergence</strong> to quantify the statistical "uniqueness" of a token relative to the group consensus. This process isolates critical <strong>branching points</strong>—pivotal decision moments where the model's inference trajectories truly diverge—distinguishing them from high-entropy noise.
+              </p>
+
+              <h4 style="color: #3273dc; margin-bottom: 0.5rem;">🔹 Sparse-GRPO Estimator</h4>
+              <p style="font-size: 1rem;">
+                We introduce a binary sparse mask ($M_{i,t}$) designed to activate updates exclusively for tokens in the <strong>top $k$-percentile</strong> of uniqueness. This sparse update strategy effectively filters out redundant reasoning steps and stabilizes the gradient flow by ignoring low-information "trivial" tokens.
+              </p>
+            </div>
+
+            <!-- Column 2: Stability & Workflow -->
+            <div class="column">
+              <h4 style="color: #3273dc; margin-bottom: 0.5rem;">🔹 Optimization Stability</h4>
+              <p style="font-size: 1rem; margin-bottom: 1.2rem;">
+                By regulating <strong>Strategy Purity</strong>, the framework resolves the optimization dichotomy in RLVR. It prevents <strong>"Entropy Collapse"</strong> (premature convergence) while simultaneously avoiding <strong>"Entropy Explosion"</strong> (blind exploration), resulting in a 5.65% improvement on the Math benchmark.
+              </p>
+
+              <!-- Workflow Box -->
+              <div style="padding: 1rem; background-color: #f6f8fa; border-left: 5px solid #3273dc; border-radius: 4px;">
+                <h4 style="margin-top: 0; font-size: 1.1rem;">🚀 Execution Workflow</h4>
+                <p style="margin-bottom: 0; font-size: 0.95rem; font-family: monospace;">
+                  Rollout Generation <br>
+                  ➔ JS-based Uniqueness Scoring <br>
+                  ➔ Sparse Gradient Masking <br>
+                  ➔ Targeted Parameter Update
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 3. Results Section -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-multiline">
+      <!-- 标题与文字说明 -->
+      <div class="column is-12">
+        <h2 class="title is-3 section-title">
+          <span class="header-icon">📊</span>Leaderboard: Quantitative Results
+        </h2>
+        <div class="content">
+          <p>
+            Our ICT framework consistently outperforms standard GRPO across different model scales. 
+            Updating only the <strong>top 10%</strong> of unique tokens achieves state-of-the-art reasoning performance.
+          </p>
+        </div>
+      </div>
+
+      <!-- 表格部分：参考图二风格 -->
+      <div class="column is-12">
+        <div class="table-container" style="border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow-x: auto;">
+          <table class="table is-fullwidth is-hoverable" style="font-size: 0.95rem; vertical-align: middle;">
+            <thead style="background-color: #f5f7f9;">
+              <tr>
+                <th rowspan="2" style="vertical-align: middle;">Method</th>
+                <th colspan="2" class="has-text-centered">Math500 (%)</th>
+                <th colspan="2" class="has-text-centered">GSM8K (%)</th>
+                <th colspan="2" class="has-text-centered">MMLU-stem (%)</th>
+                <th colspan="2" class="has-text-centered">GPQA (%)</th>
+              </tr>
+              <tr style="font-size: 0.85rem;">
+                <th class="has-text-centered">Pass@1</th>
+                <th class="has-text-centered">Pass@4</th>
+                <th class="has-text-centered">Pass@1</th>
+                <th class="has-text-centered">Pass@4</th>
+                <th class="has-text-centered">Pass@1</th>
+                <th class="has-text-centered">Pass@4</th>
+                <th class="has-text-centered">Pass@1</th>
+                <th class="has-text-centered">Pass@4</th>
+              </tr>
+            </thead>
+            
+            <tbody>
+              <!-- Qwen2.5-0.5B Group -->
+              <tr style="background-color: #fcfcfc; font-weight: bold; color: #555;">
+                <td colspan="9" class="has-text-centered">Qwen2.5-0.5B</td>
+              </tr>
+              <tr>
+                <td>Base</td>
+                <td class="has-text-centered">11.05</td>
+                <td class="has-text-centered">21.2</td>
+                <td class="has-text-centered">13.88</td>
+                <td class="has-text-centered">38.62</td>
+                <td class="has-text-centered">11.22</td>
+                <td class="has-text-centered">30.98</td>
+                <td class="has-text-centered">2.52</td>
+                <td class="has-text-centered">7.11</td>
+              </tr>
+              <tr>
+                <td>GRPO</td>
+                <td class="has-text-centered">11.7</td>
+                <td class="has-text-centered">23.2</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">42.87</td>
+                <td class="has-text-centered">63.15</td>
+                <td class="has-text-centered">12.52</td>
+                <td class="has-text-centered">32.27</td>
+                <td class="has-text-centered">5.11</td>
+                <td class="has-text-centered" style="font-weight: bold;">8.44</td>
+              </tr>
+              <tr style="background-color: #f0f6ff;">
+                <td style="font-weight: bold;">ICT (Ours)</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">12.15</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">24.8</td>
+                <td class="has-text-centered">40.27</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">65.4</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">16.85</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">40.62</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">6.7</td>
+                <td class="has-text-centered">7.13</td>
+              </tr>
+
+              <!-- Qwen2.5-1.5B Group -->
+              <tr style="background-color: #fcfcfc; font-weight: bold; color: #555;">
+                <td colspan="9" class="has-text-centered">Qwen2.5-1.5B</td>
+              </tr>
+              <tr>
+                <td>Base</td>
+                <td class="has-text-centered">17.25</td>
+                <td class="has-text-centered">31.4</td>
+                <td class="has-text-centered">43.1</td>
+                <td class="has-text-centered">77.29</td>
+                <td class="has-text-centered">33.95</td>
+                <td class="has-text-centered">64.8</td>
+                <td class="has-text-centered">14.02</td>
+                <td class="has-text-centered">28.7</td>
+              </tr>
+              <tr>
+                <td>GRPO</td>
+                <td class="has-text-centered">17.9</td>
+                <td class="has-text-centered">33.8</td>
+                <td class="has-text-centered">61.51</td>
+                <td class="has-text-centered">81.71</td>
+                <td class="has-text-centered">29.7</td>
+                <td class="has-text-centered">61.4</td>
+                <td class="has-text-centered">13.84</td>
+                <td class="has-text-centered">28.91</td>
+              </tr>
+              <tr style="background-color: #f0f6ff;">
+                <td style="font-weight: bold;">ICT (Ours)</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">23.55</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">37.6</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">66.23</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">85.31</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">37.8</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">69.4</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">16.28</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">29.27</td>
+              </tr>
+
+              <!-- Qwen2.5-7B Group -->
+              <tr style="background-color: #fcfcfc; font-weight: bold; color: #555;">
+                <td colspan="9" class="has-text-centered">Qwen2.5-7B</td>
+              </tr>
+              <tr>
+                <td>Base</td>
+                <td class="has-text-centered">22.4</td>
+                <td class="has-text-centered">43.8</td>
+                <td class="has-text-centered">80.3</td>
+                <td class="has-text-centered">96.0</td>
+                <td class="has-text-centered">48.75</td>
+                <td class="has-text-centered">81.4</td>
+                <td class="has-text-centered">22.92</td>
+                <td class="has-text-centered" style="font-weight: bold;">34.35</td>
+              </tr>
+              <tr>
+                <td>GRPO</td>
+                <td class="has-text-centered">27.4</td>
+                <td class="has-text-centered">47.2</td>
+                <td class="has-text-centered">92.23</td>
+                <td class="has-text-centered">97.92</td>
+                <td class="has-text-centered">49.5</td>
+                <td class="has-text-centered">80.2</td>
+                <td class="has-text-centered">23.06</td>
+                <td class="has-text-centered">34.1</td>
+              </tr>
+              <tr style="background-color: #f0f6ff;">
+                <td style="font-weight: bold;">ICT (Ours)</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">33.35</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">50.8</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">93.23</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">98.08</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">51.75</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">81.2</td>
+                <td class="has-text-centered" style="color: #3273dc; font-weight: bold;">23.07</td>
+                <td class="has-text-centered">34.24</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="help has-text-grey has-text-centered mt-3">
+          Table 1: Performance comparison. Bold numbers indicate the best results within each group.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experimental Analysis Section: Height Optimized -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-vcentered is-variable is-8">
+      
+      <!-- Left Column: Technical Introduction -->
+      <div class="column is-5">
+        <h2 class="title is-4" style="margin-bottom: 1.5rem;">
+          <span style="margin-right: 0.5rem;">📈</span> Analysis of Optimal Sparsity
+        </h2>
+        
+        <div class="content has-text-justified" style="font-size: 0.95rem; line-height: 1.6; color: #444;">
+          <p style="margin-bottom: 1.2rem;">
+            These figures collectively demonstrate why <strong>10%</strong> is the optimal threshold for identifying the "Reasoning Core" of an LLM.
+          </p>
+
+          <h4 style="font-size: 1.1rem; color: #222; margin-bottom: 0.5rem;">Less is More</h4>
+          <p style="margin-bottom: 1.5rem;">
+            Figure 3 compares reward trajectories across different ratios. The <strong>10% strategy (orange)</strong> achieves the highest stable reward, outperforming the full uniform update (orange) and larger sparse ratios (20-30%). Notably, updating the remaining 90% (purple) yields the lowest results, proving those tokens provide negligible value for reasoning.
+          </p>
+
+          <h4 style="font-size: 1.1rem; color: #222; margin-bottom: 0.5rem;">Empirical Validation</h4>
+          <p style="margin-bottom: 1.2rem;">
+            Figure 4 illustrates the sorted <strong>JS Divergence</strong> scores for the Qwen2.5-1.5B model. We observe a sharp <strong>"Elbow Effect"</strong> (red dashed line) at the top 10% percentile. This indicates that while most tokens share redundant structures, only this top 10%—the <b>Unique Tokens</b>—represent critical branching points in reasoning.
+          </p>
+
+
+
+          <div style="background-color: #f0f6ff; padding: 1rem; border-left: 5px solid #3273dc; border-radius: 4px;">
+            <p style="margin-bottom: 0; font-weight: 600;">
+              Key Insight: Less is More. Targeting the structural core (top 10%) is more efficient and effective than dense, uniform updates.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Vertical Image Stack -->
+      <div class="column is-7">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
+          <!-- Figure 3 -->
+          <div style="width: 100%; text-align: center;">
+            <img src="./static/images/Fig3.png" style="width: 90%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" alt="Reward Trajectories">
+            <p style="font-size: 0.82rem; color: #666; margin-top: 0.5rem;">
+              <strong>Figure 3:</strong> Comparison of reward trajectories across different update ratios.
+            </p>
+          </div>
+
+          <!-- Figure 4 -->
+          <div style="width: 100%; text-align: center;">
+            <img src="./static/images/Fig4.png" style="width: 90%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" alt="JS Divergence Elbow">
+            <p style="font-size: 0.82rem; color: #666; margin-top: 0.5rem;">
+              <strong>Figure 4:</strong> Sorted JS scores revealing the 10% structural inflection point.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 4. Robustness & Token Property Analysis -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-vcentered is-variable is-8">
+      
+      <!-- 左侧图片：垂直堆叠 Fig 5 和 Fig 6 -->
+      <div class="column is-7">
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
+          
+          <!-- 图 5：热身步数对比 -->
+          <div style="width: 100%; text-align: center;">
+            <img src="./static/images/Fig5.png" style="width: 85%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" alt="Warm-up Robustness">
+            <p style="font-size: 0.82rem; color: #666; margin-top: 0.5rem;">
+              <strong>Figure 5:</strong> Reward trajectories across different warm-up onset steps (10, 20, 40).
+            </p>
+          </div>
+
+          <!-- 图 6：熵比例分析 -->
+          <div style="width: 100%; text-align: center;">
+            <img src="./static/images/Fig6.png" style="width: 85%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);" alt="Entropy Ratio Analysis">
+            <p style="font-size: 0.82rem; color: #666; margin-top: 0.5rem;">
+              <strong>Figure 6:</strong> Ratio of high-entropy to low-entropy unique tokens for Math & GSM8K.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 右侧文字：技术解析 -->
+      <div class="column is-5">
+        <h2 class="title is-4" style="margin-bottom: 1.5rem;">
+          <span style="margin-right: 0.5rem;">⚙️</span> Robustness & Token Properties
+        </h2>
+        
+        <div class="content has-text-justified" style="font-size: 0.95rem; line-height: 1.6; color: #444;">
+          
+          <h4 style="font-size: 1.1rem; color: #222; margin-bottom: 0.5rem;">1. Warm-up Independence </h4>
+          <p style="margin-bottom: 1.2rem;">
+              A critical requirement for any reinforcement learning framework is its <strong>temporal robustness</strong>. As demonstrated in the evaluation of intervention timing, the ICT framework maintains exceptional stability regardless of when the sparse update logic is introduced. Whether the transition from dense to sparse training begins early (step 10) or late (step 40), all trajectories converge to a consistent reward plateau. This proves that the method is not sensitive to initial policy noise and can effectively stabilize the training landscape across various stages of model development.
+          </p>
+
+          <h4 style="font-size: 1.1rem; color: #222; margin-bottom: 0.5rem;">2. Structural vs. Uncertainty </h4>
+          <p style="margin-bottom: 1.5rem;">
+            Our analysis further reveals a fundamental distinction between <strong>structural uniqueness</strong> and <strong>scalar uncertainty</strong>. While traditional exploration strategies prioritize high-entropy tokens, the ICT framework identifies critical decision hubs that are often overlooked. The evidence shows an approximately <strong>1:1 ratio</strong> between high-entropy and low-entropy tokens among the identified "unique" sets. This indicates that even tokens with high model confidence can be essential branching points for logical reasoning. By targeting these structural markers, the model preserves strategic purity while avoiding the chaos of blind exploration.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BibTeX -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title section-title"><span class="header-icon">📚</span>BibTeX</h2>
+    <pre><code>@article{feng2026unraveling,
+  author    = {Feng, Xuanzhi and Li, Haoxi & Guo, Bing & Jiang, Yuming & Zhang, Jie & Guo, Song},
+  title     = {Unraveling the Reasoning Core: Unique Tokens Drive Effective Reinforcement Learning for LLM Exploration},
+  journal   = {Under Review},
+  year      = {2026},
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        Website adapted from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
